@@ -58,20 +58,9 @@ const displayBooks = books => {
                             <h6>Author Names:${book.author_name}</h6>
                             <h6>First Publish Year:${book.first_publish_year}</h6>
                         </div>
-                        <div class="card-footer">
-                            <button onclick="authorDetails('${book.author_key}')" class="text-end rounded">Author Details</button>
-                        </div>
                     </div>
                  </div>
         `;
         displayAll.appendChild(div);
     });
-}
-
-const authorDetails = (authhorKey) => {
-    fetch(`https://openlibrary.org/authors/${authhorKey}.json`)
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-        })
 }
