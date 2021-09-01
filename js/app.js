@@ -1,52 +1,50 @@
-const details = document.getElementById('details');
 const displayAll = document.getElementById('display');
 
-
-
-// Get Fetch JSON Data
+// Search Book from JSON
 const searchBook = () => {
     const input = document.getElementById('input');
     const searchText = input.value;
     input.value = '';
     if (searchText.length == '') {
-        // For Empty Input
-        const countSection = document.getElementById('count');
-        countSection.textContent = '';
-        const h5 = document.createElement('h5');
-        h5.classList.add('text-center');
-        h5.innerText = `Somthing Error Try Again!`;
-        countSection.appendChild(h5);
+        // For Empty Search
+        const booksCount = document.getElementById('count');
+        booksCount.textContent = '';
+        const error = document.createElement('h3');
+        error.classList.add('error-message');
+        error.innerText = `Please insert something!!!`;
+        booksCount.appendChild(error);
         displayAll.textContent = '';
 
-    } else {
+    } 
+    else {
         fetch(`http://openlibrary.org/search.json?q=${searchText}`)
             .then(res => res.json())
             .then(data => {
                 // console.log(data)
-                count(data.num_found);
+                totalBooks(data.num_found);
                 displayBooks(data.docs);
             });
     }
 }
 
-// Count Total Result and Error Message
-const count = (count) => {
-    const countSection = document.getElementById('count');
-    countSection.textContent = '';
-    const h5 = document.createElement('h5');
-    h5.classList.add('text-center');
+// Count Total Books and Show Error Message whenever find nothing
+const totalBooks = count => {
+    const totalBook = document.getElementById('count');
+    totalBook.textContent = '';
+    const bookCount = document.createElement('h4');
+    bookCount.classList.add('bookCount');
     if (count == 0) {
-        h5.innerText = `Sorry! We can't found any Book,Please try with Correct name.`;
+        bookCount.innerText = `No books are found! Try again.`;
     } else {
-        h5.innerText = `Total Book Found : ${count}`;
+        bookCount.innerText = `Total Books Found : ${count}`;
     }
-    countSection.appendChild(h5);
+    totalBook.appendChild(bookCount);
 }
 
 
 
-// display All Results of Book
-const displayBooks = (books) => {
+// display All Results by Searching Book
+const displayBooks = books => {
     displayAll.textContent = '';
     books.forEach(book => {
         // console.log(book);
@@ -54,11 +52,11 @@ const displayBooks = (books) => {
         div.innerHTML = `
                 <div class="col">
                     <div class="card h-100">
-                        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" height="600vh"  class="card-img-top" alt="...">
+                        <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" height="600vh"  class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title">${book.title}</h5>
                             <h6>Author Names:${book.author_name}</h6>
-                            <h6>Publish Date:${book.publish_date}</h6>
+                            <h6>First Publish Year:${book.first_publish_year}</h6>
                         </div>
                         <div class="card-footer">
                             <button onclick="authorDetails('${book.author_key}')" class="text-end rounded">Author Details</button>
